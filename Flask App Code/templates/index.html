@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask CRUD App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <h1 class="mb-4">Flask CRUD App</h1>
+    <form method="POST" class="mb-4">
+                {{ form.csrf_token }}
+        <div class="row g-2">
+                        <div class="col-md-2">{{ form.first_name(class="form-control", placeholder="First Name") }}</div>
+                        <div class="col-md-2">{{ form.last_name(class="form-control", placeholder="Last Name") }}</div>
+                        <div class="col-md-3">{{ form.email(class="form-control", placeholder="Email") }}</div>
+                        <div class="col-md-2">{{ form.phone(class="form-control", placeholder="Phone") }}</div>
+                        <div class="col-md-3">{{ form.address(class="form-control", placeholder="Address") }}</div>
+        </div>
+                <button type="submit" class="btn btn-primary mt-2">Add User</button>
+    </form>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.first_name }}</td>
+                <td>{{ user.last_name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.phone }}</td>
+                <td>{{ user.address }}</td>
+                <td>
+                    <a href="/update/{{ user.id }}" class="btn btn-sm btn-warning">Update</a>
+                    <form method="POST" action="/delete/{{ user.id }}" style="display:inline;">
+                        {{ delete_form.csrf_token }}
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this user?');">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
